@@ -1,10 +1,36 @@
 'use strict';
 
 class TreeNode{
-  constructor(data){
+  constructor(data, parent){
     this.data = data;
     this.left = null;
     this.right = null;
+    this.parent = parent;
+  }
+};
+
+class BT{
+  constructor(){
+    this.root = null;
+  }
+  isEmpty(){ return this.root == null; }
+  insert(v){
+    if (this.root == null){ this.root = new TreeNode(v, null); }
+    else {
+      let q = [];
+      q.unshift(this.root);
+      while (q.length > 0){
+        let node = q.shift();
+        if (! node.left){
+          node.left = new TreeNode(v, node);
+        } else if (! node.right){
+          node.right = new TreeNode(v, node);
+        } else {
+          q.unshift(node.left);
+          q.unshift(node.right);
+        }
+      }
+    }
   }
 };
 
@@ -45,4 +71,6 @@ class BST{
 
 module.exports = {
   BST,
+  BT,
+  TreeNode,
 };

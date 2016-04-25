@@ -19,8 +19,47 @@ let Graph = require('./Graph').Graph;
 let Queue = require('./Graph').Queue;
 let Bag = require('./Graph').Bag;
 
-class DFS{
-  constructor(G, s){
-    
+class Digraph{
+  constructor(V, a){
+    this.V = V;
+    this.E = 0;
+    this.adj = {}; 
+    a.forEach((v) => {
+      this.adj[v] = new Bag();
+    });
+  }
+  getV(){ return this.V; }
+  getE(){ return this.E; }
+  addEdge(v, w){
+    this.adj[v].add(w);
+    this.E++;
   }
 };
+
+let PROJECTS = ['a', 'b', 'c', 'd', 'e', 'f'];
+let DEPENDENCIES = [
+  ['d', 'a'],
+  ['b', 'f'],
+  ['d', 'b'],
+  ['a', 'f'],
+  ['c', 'd'],
+];
+
+function buildOrder(projects, dependencies){
+  let graph = new Digraph(projects.length, projects);
+  dependencies.forEach((p) => graph.addEdge(p[0], p[1]));
+  console.log('GRAPH', graph);
+  let q = [];
+  let order = [];
+  let keys = Object.keys(graph.adj);
+  q.unshift(keys.shift());
+  while (! q.length > 0){
+    let n = q.shift();
+    graph.adj[n].iterator((v) => {
+      order.push(v.data);
+      q.unshift(v.data);
+    });
+  }
+};
+
+buildOrder(PROJECTS, DEPENDENCIES);

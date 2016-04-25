@@ -7,61 +7,35 @@
  * node never differ by more than one.
  */
 
-class TreeNode{
-  constructor(data){
-    this.data = data;
-    this.left = null;
-    this.right = null;
-    this.parent = null;
+let BST = require('./BinaryTree').BST;
+
+let bst = new BST();
+
+let arr = [2, 1, 3];
+
+arr.forEach((v) => bst.insert(v));
+
+function checkHeight(root){
+  if (root == null) { return 0; }
+  let leftHeight = checkHeight(root.left);
+  if (leftHeight == -1 ){ return -1; }
+  let rightHeight = checkHeight(root.right);
+  if (rightHeight == -1){ return -1; }
+
+  let heightDiff = leftHeight - rightHeight;
+  if (Math.abs(heightDiff) > 1){
+    return -1;
+  } else {
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+};
+function isBalanced(root){
+  if (checkHeight(root) == -1){
+    return false;
+  } else {
+    return true;
   }
 };
 
-class BinaryTree{
-  constructor(){
-    this.root = null;
-  }
-  insert(data){
-    this.root = this.insertNode(this.root, data);
-  }
-  insertNode(node, data){
-    if (node == null){ return new TreeNode(data); }
-    let q = [node];
-    while (q.length > 0){
-      let n = q.shift();
-      if      (n.left == null )   { n.left = new TreeNode(data); break; }
-      else if (n.right == null )  { n.right = new TreeNode(data); break; }
-      else {
-        console.log('N', n.data);
-        q.unshift(n.left);
-        q.unshift(n.right);
-      }
-    }
-    return node;
-  }
-  iterator(func){
-    let q = [this.root];
-    while (q.length > 0){
-      let n = q.pop();
-      console.log('N', n.data);
-      func(n);
-      if (! n.left || ! n.right ) { break; }
-      else {
-        if (n.left) { q.unshift(n.left); }
-        else if (n.right) { q.unshift(n.right); }
-      }
-    }
-  }
-  toString(){
-    let str = '';
-    this.iterator((n) => {
-      str += n.data + '\n';
-    });
-    return str;
-  }
-};
+console.log(isBalanced(bst.root));
 
-let bt = new BinaryTree();
-let a = [1, 3, 5, 2, 6, 7];
-a.forEach((v) => bt.insert(v));
-console.log(bt.toString());
-console.log(bt.root);
