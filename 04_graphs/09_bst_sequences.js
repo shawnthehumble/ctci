@@ -13,3 +13,16 @@
  * Output: {2, 1, 3}, {2, 3, 1}
  */
 
+let BST = require('./BinaryTree').BST;
+
+let bst = new BST();
+
+let a = [2, 1, 3];
+
+a.forEach((v) => bst.insert(v));
+
+function treePermutations(tree){
+  
+};
+
+console.log(treePermutations(bst));
