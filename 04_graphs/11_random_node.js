@@ -21,24 +21,49 @@ class TreeNode{
 class BT{
   constructor(){
     this.root = null;
-    this.N = 0;
-    this.bottom = [];
   }
   insert(v){
-    if (this.root == null) { this.root = new TreeNode(v, null); }
-    else {
-      let q = [];
-      q.unshift(this.root);
-      while (q.length > 0){
-        let n = q.shift();
-        if (! n.left ) { n.left = new TreeNode(v, n); }
-        else if (! n.right) { n.right = new TreeNode(v, n); }
-        else {
-          q.unshift(n.left);
-          q.unshift(n.right);
-        }
+    this.root = this.insertNode(this.root, v);
+  }
+  insertNode(node, v){
+    if (node == null) { return new TreeNode(v, null); }
+    if (v > node.data){
+      node.right = this.insertNode(node.right, v);
+    } else {
+      node.left = this.insertNode(node.left, v);
+    }
+    return node;
+  }
+  find(v){
+    let n = this.root;
+    while (n != null){
+      if (v > n.data) {
+        n = n.right;
+      } else {
+        n = n.left;
       }
     }
+    if (n == null) { return -1; }
+    else {
+      return n;
+    }
+  }
+  getRandomNode(){
+    let a = [];
+    let n = this.root;
+    while (n != null){
+      a.push(n);
+      if (Math.random() < 0.5){ n = n.left; }
+      else { n = n.right }
+    }
+    let idx = Math.floor(Math.random()*a.length);
+    return a[idx];
   }
 };
 
+let a = [10, 4, 14, 23, 8, 3];
+let bt = new BT();
+
+a.forEach((v) => bt.insert(v));
+
+console.log(bt.getRandomNode());

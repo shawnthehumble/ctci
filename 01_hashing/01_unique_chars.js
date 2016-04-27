@@ -2,82 +2,56 @@
  * What if you cannot use additional data structures?
  */
 
-'use strict';
-
-function hasUniqueChars(str){
-  let hash = {};
-  for (let i=0; i<str.length; i++){
-    if (hash[str[i]]) { return false }
-    else { hash[str[i]] = 1; }
-  }
-  return true;
-};
-
-/* without data structures */
-function shuffle(arr){
-  let temp, idx;
-  for (let i=0; i<arr.length; i++){
-    idx = Math.floor(Math.random()*arr.length);
-    temp = arr[i];
-    arr[i] = arr[idx];
-    arr[idx] = temp;
-  }
-};
-
-function exch(arr, i, j) {
-  let temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-};
-
-function partition(arr, lo, hi){
-  let i = lo, j = hi + 1, v = arr[lo];
-  while (true){
-    while ( arr[++i] < v ) {
-      if (i == hi) { break; }
-    }
-    while ( arr[--j] > v ) {
-      if ( j == lo ) { break; }
-    }
-    if (i >= j) { break; }
-    exch(arr, i, j);
-  }
-  exch(arr, lo, j);
-  return j;
-};
-
-function quickSort(arr, lo, hi){
-  if (lo == undefined) {
-   lo = 0, hi = arr.length - 1;
-   shuffle(arr);
-  }
-  if (lo >= hi ) { return; }
-  let j = partition(arr, lo, hi);
-  quickSort(arr, lo, j - 1);
-  quickSort(arr, j + 1, hi);
-};
-
-function hasUniqueCharsNoABT(str){
+function hasUniqueChars2(str){
   str = str.split('');
-  quickSort(str);
-  for (let i=1; i<str.length; i++){
+  QuickSort(str);
+  for(let i=1; i<str.length; i++){
     if (str[i] == str[i-1]) { return false; }
   }
   return true;
 };
 
+function partition(str, lo, hi){
+  let i = lo, j = hi + 1, v = str[lo];
+  while (true) {
+    while (str[++i] < v){
+      if (i == hi){ break; }
+    }
+    while (str[--j] > v){
+      if (j == lo) { break; }
+    }
+    if (i >= j ) { break; }
+    let temp = str[i];
+    str[i] = str[j];
+    str[j] = temp;
+  }
+  let temp = str[lo];
+  str[lo] = str[j], str[j] = temp;
+  return j;
+};
 
-let TEST_CASES = [
-  'hello',
-  'amsterdam',
-  'cat',
-  'pickle'
-];
+function QuickSort(str, lo, hi){
+  if (lo == undefined){ lo = 0; hi = str.length - 1; }
+  if (lo >= hi) { return; }
+  let j = partition(str, lo, hi);
+  QuickSort(str, lo, j - 1);
+  QuickSort(str, j + 1, hi);
+}
 
-TEST_CASES.forEach((c) => {
-  console.log(c, hasUniqueCharsNoABT(c));
-});
+function hasUniqueChars1(str){
+  let obj = {};
+  for(let i=0; i<str.length; i++){
+    let letter = str[i];
+    if (obj[letter]) { return false; }
+    else {
+      obj[letter] = 1;
+    }
+  }
+  return true;
+};
 
-TEST_CASES.forEach((c) => {
-  console.log(c, hasUniqueChars(c));
-});
+let str1 = 'dog';
+let str2 = 'tell';
+
+console.log(hasUniqueChars2(str1));
+console.log(hasUniqueChars2(str2));

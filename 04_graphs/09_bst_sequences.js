@@ -22,7 +22,7 @@ let a = [2, 1, 3];
 a.forEach((v) => bst.insert(v));
 
 function treePermutations(tree){
-  
+   
 };
 
 console.log(treePermutations(bst));

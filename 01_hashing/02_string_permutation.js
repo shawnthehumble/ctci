@@ -2,61 +2,37 @@
  * 'Given 2 strings, write a method to determine if 1 is a permutation of the other'
  */
 
-'use strict';
-
-function isPermutation(str1, str2){
-  return str1.split('').sort().join('') == str2.split('').sort().join('');
-};
-
-function merge(arr, lo, mid, hi){
-  if ((hi - lo) > 4) {
-    let arr1 = arr.slice(lo, mid + 1);
-    let arr2 = arr.slice(mid + 1, hi + 1);
-    let idx = lo;
-    while (arr1.length || arr2.length){
-      if (arr2[0] < arr1[0] || ! arr1.length) {
-        arr[idx++] = arr2.shift();
-      } else {
-        arr[idx++] = arr1.shift();
-      }
-    }
-  } else {
-    for (let i=lo; i<hi+1; i++){
-       for (let j=i; j>0 && arr[j] < arr[j-1]; j--){
-         let temp = arr[j];
-         arr[j] = arr[j-1];
-         arr[j-1] = temp;
-       }
-     }
-  }
-};
-
 function mergeSort(arr, lo, hi){
-  if (lo == undefined) {lo = 0, hi = arr.length - 1; }
-  if (lo >= hi) { return; }
+  if (lo >= hi){ return; }
+  if (lo == undefined) { lo = 0, hi = arr.length - 1; }
   let mid = lo + Math.floor((hi - lo)/2);
   mergeSort(arr, lo, mid);
   mergeSort(arr, mid + 1, hi);
   merge(arr, lo, mid, hi);
+  return arr;
 };
 
-function isPermutationMerge(str1, str2){
-  str1 = str1.split(''), str2 = str2.split('');
-  mergeSort(str1);
-  mergeSort(str2);
-  return str1.join('') == str2.join('');
+function merge(arr, lo, mid, hi){
+  let temp1 = arr.slice(lo, mid + 1);
+  let temp2 = arr.slice(mid + 1, hi + 1);
+  let idx = lo;
+  while (temp1.length || temp2.length){
+    if (temp1[0] > temp2[0] || ! temp1.length){
+      arr[idx++] = temp2.shift();
+    } else {
+      arr[idx++] = temp1.shift();
+    }
+  }
 };
 
+function isPermutation(str1, str2){
+  let s1 = mergeSort(str1.split(''));
+  let s2 = mergeSort(str2.split(''));
+  return s1.join('') == s2.join('');
+};
 
-const TEST_CASES = [
-   ['cat', 'tac'],
-   ['malayalam', 'yalamalam'],
-   ['hello', 'oellh'],
-   ['god', 'dog'],
-   ['hey', 'yo'],
-   ['good', 'dog']
- ];
+let str1 = 'cat', str2 = 'tac', str3 = 'bat';
 
-TEST_CASES.forEach((c) => {
- console.log(c, isPermutationMerge(c[0], c[1]));
-});
+console.log(isPermutation(str1, str2));
+console.log(isPermutation(str2, str3));
+

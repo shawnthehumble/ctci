@@ -52,14 +52,20 @@ function buildOrder(projects, dependencies){
   let q = [];
   let order = [];
   let keys = Object.keys(graph.adj);
-  q.unshift(keys.shift());
-  while (! q.length > 0){
-    let n = q.shift();
-    graph.adj[n].iterator((v) => {
-      order.push(v.data);
-      q.unshift(v.data);
+  for (let i=0; i<graph.getV(); i++){
+    if (keys.length == 0 ) { break; }
+    keys = keys.filter((key) => {
+      if (!graph.adj[key].isEmpty()) { return key; }
+      else {
+        console.log('KEY', key, graph.adj);
+        order.push(key);
+        keys.forEach((k) => {
+          graph.adj[k].remove(key);
+        });
+      }
     });
   }
+  console.log('ORDER', order, keys);
 };
 
 buildOrder(PROJECTS, DEPENDENCIES);

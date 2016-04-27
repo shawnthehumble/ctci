@@ -20,6 +20,23 @@ class Bag{
     }
     this.N++;
   }
+  remove(data){
+    if (this.head && this.head.data == data){
+      let oldhead = this.head;
+      this.head = oldhead.next;
+      if (this.N > 0) { this.N--; }
+      return oldhead;
+    } else {
+      this.forEach((n) => {
+        if (n.next && n.next.data == data){
+          let oldnext = n.next;
+          n.next = oldnext.next;
+          if (this.N > 0) { this.N--; }
+          return oldnext;
+        }
+      });
+    }
+  }
   forEach(func){
     let head = this.head;
     while (head != null){
