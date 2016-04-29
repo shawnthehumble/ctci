@@ -1,5 +1,3 @@
-'use strict';
-
 /* String Compression
  * Implement a method to perform basic string compression using the counts
  * of repeated characters. For example, the string aabccccaaa would become a2b1c5a3.
@@ -9,30 +7,24 @@
  */
 
 function compress(str){
-  let compressedStr = '';
-  let count = 1;
-  for (let i=1; i<str.length; i++){ // N
-    if (count > 1 && str[i] != str[i-1]){
-      compressedStr += `${str[i-1]}${count}`;
-      count = 1;
-    } else if (count == 1 && str[i] != str[i-1]){
-      compressedStr += str[i-1];
-      count = 1;
+  let a = [];
+  let last = [ str[0] ];
+  let isShorter = false;
+  for (let i=1; i<str.length; i++){
+    if (str[i] != str[i-1]){
+      a.push(last);
+      last = [str[i]];
     } else {
-      count++;
+      last.push(str[i]);
+      if (i == str.length -1 ){ a.push(last); }
+      if (last.length > 2) { isShorter = true; }
     }
   }
-  let last = count > 1 ? `${str[str.length-1]}${count}` : str[str.length-1];
-  return compressedStr + last;
+  let result = isShorter ? a.map((v) => `${v[0]}${v.length}`).join('') : str;
+  return result;
 };
 
-const TEST_CASES = [
-  'aabccccdaaabd',
-  'aaaaaabbcc',
-  'abcdefg',
-  'abbcdefg'
-];
+let str1 = 'aabccccaaa', str2 = 'aabbccdd';
 
-TEST_CASES.forEach((c) => {
-  console.log(c, compress(c));
-});
+console.log(compress(str1));
+console.log(compress(str2));
